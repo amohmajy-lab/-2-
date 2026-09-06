@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار حفظ وفهم – الصفحة الثانية من سورة البقرة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFEBDD;
+    --ink:#26302A;
+    --primary:#1F4B3F;
+    --accent:#A9812E;
+    --correct:#3C7A54;
+    --incorrect:#A23B2E;
+    --line:#D9D3BE;
+    --paper-2:#F7F5EC;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Tajawal',sans-serif;
+    line-height:1.9;
+    padding:28px 14px 80px;
+  }
+  .sheet{
+    max-width:700px;
+    margin:0 auto;
+    background:var(--paper-2);
+    border-top:3px double var(--accent);
+    border-bottom:3px double var(--accent);
+    padding:34px 28px 44px;
+    position:relative;
+  }
+  .ornament{
+    width:8px;height:8px;
+    background:var(--accent);
+    transform:rotate(45deg);
+    margin:0 auto 18px;
+  }
+  h1{
+    font-family:'Amiri',serif;
+    font-size:1.7rem;
+    text-align:center;
+    margin:0 0 6px;
+    color:var(--primary);
+  }
+  .sub{
+    text-align:center;
+    color:#6b6558;
+    font-size:.92rem;
+    margin-bottom:28px;
+  }
+  .meta-row{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    border-bottom:1px solid var(--line);
+    padding-bottom:18px;
+    margin-bottom:26px;
+  }
+  .meta-row label{
+    font-size:.9rem;
+    color:#544f43;
+    display:block;
+    margin-bottom:4px;
+  }
+  .meta-row input{
+    font-family:'Tajawal',sans-serif;
+    border:none;
+    border-bottom:1px solid var(--line);
+    background:transparent;
+    padding:4px 2px;
+    font-size:.95rem;
+    color:var(--ink);
+    width:220px;
+  }
+  .meta-row input:focus{outline:none;border-color:var(--primary);}
+  .part-title{
+    font-family:'Amiri',serif;
+    font-weight:700;
+    color:var(--primary);
+    font-size:1.15rem;
+    margin:34px 0 14px;
+    padding-bottom:6px;
+    border-bottom:1px solid var(--line);
+  }
+  .q{
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+    transition:border-color .3s ease;
+  }
+  .q-prompt{
+    font-family:'Amiri',serif;
+    font-size:1.15rem;
+    margin-bottom:10px;
+  }
+  .q-num{
+    color:var(--accent);
+    font-weight:700;
+    margin-left:6px;
+  }
+  .q textarea, .q input[type=text]{
+    width:100%;
+    font-family:'Amiri',serif;
+    font-size:1.1rem;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:2px;
+    padding:9px 12px;
+    resize:vertical;
+    color:var(--ink);
+  }
+  .q textarea:focus, .q input[type=text]:focus{
+    outline:none;
+    border-color:var(--primary);
+  }
+  .feedback{
+    margin-top:10px;
+    font-size:.92rem;
+    display:none;
+    padding-right:10px;
+    border-right:3px solid transparent;
+  }
+  .feedback.show{display:block;}
+  .feedback .tag{
+    font-weight:700;
+    display:inline-block;
+    margin-bottom:3px;
+  }
+  .q.correct{border-right:3px solid var(--correct);}
+  .q.incorrect{border-right:3px solid var(--incorrect);}
+  .q.correct .feedback .tag{color:var(--correct);}
+  .q.incorrect .feedback .tag{color:var(--incorrect);}
+  .correct-ans{
+    font-family:'Amiri',serif;
+    color:var(--primary);
+  }
+  .actions{
+    display:flex;
+    gap:12px;
+    margin-top:34px;
+    justify-content:center;
+  }
+  button{
+    font-family:'Tajawal',sans-serif;
+    font-weight:700;
+    font-size:1rem;
+    padding:12px 30px;
+    border:none;
+    border-radius:3px;
+    cursor:pointer;
+  }
+  #gradeBtn{background:var(--primary);color:#fff;}
+  #gradeBtn:hover{background:#173a30;}
+  #resetBtn{background:transparent;color:var(--ink);border:1px solid var(--line);}
+  #resetBtn:hover{border-color:var(--ink);}
+  #printBtn{background:transparent;color:var(--accent);border:1px solid var(--accent);}
+
+  #result{
+    display:none;
+    margin:0 0 30px;
+    text-align:center;
+    padding:22px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    opacity:0;
+    transform:translateY(-6px);
+    animation:reveal .5s ease forwards;
+  }
+  #result.show{display:block;}
+  @keyframes reveal{to{opacity:1;transform:translateY(0);}}
+  #result .score{
+    font-family:'Amiri',serif;
+    font-size:2.4rem;
+    color:var(--primary);
+    font-weight:700;
+  }
+  #result .pct{
+    color:var(--accent);
+    font-size:1.05rem;
+    margin-top:2px;
+  }
+  #result .note{
+    font-size:.9rem;
+    color:#6b6558;
+    margin-top:10px;
+  }
+  @media print{
+    body{background:#fff;padding:0;}
+    .sheet{border:none;padding:0;}
+    .actions{display:none;}
+    textarea,input[type=text]{border:none !important;background:transparent !important;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="ornament"></div>
+  <h1>اختبار حفظ وفهم – الصفحة الثانية من سورة البقرة</h1>
+  <div class="sub">آيات 6 – 16 (المنافقون)</div>
+
+  <div class="meta-row">
+    <div>
+      <label>الاسم</label>
+      <input type="text" id="studentName" placeholder="...........................">
+    </div>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div id="result">
+    <div class="score" id="scoreText">0 / 20</div>
+    <div class="pct" id="pctText"></div>
+    <div class="note">التصحيح لا يدقّق على التشكيل أو الهمزات أو المدود، ويقبل الإجابات القريبة من الصواب.</div>
+  </div>
+
+  <div class="actions">
+    <button id="gradeBtn">صحّح الاختبار</button>
+    <button id="resetBtn" type="button">إعادة تعيين</button>
+    <button id="printBtn" type="button">طباعة / حفظ PDF</button>
+  </div>
+</div>
+
+<script>
+/* ============ تطبيع النص العربي ============ */
+function normalize(text){
+  if(!text) return '';
+  return text
+    .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u08F0-\u08FF]/g,'') // تشكيل
+    .replace(/\u0640/g,'')                 // تطويل
+    .replace(/[إأآا]/g,'ا')                 // همزات الألف
+    .replace(/ى/g,'ي')                      // ألف مقصورة
+    .replace(/ة/g,'ه')                      // تاء مربوطة
+    .replace(/[ؤئء]/g,'')                   // الهمزات المفردة
+    .replace(/[﴿﴾۝.,،؟!:\-–—()]/g,' ')     // علامات ترقيم وأقواس قرآنية
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function levenshtein(a,b){
+  const m=a.length,n=b.length;
+  const dp=Array.from({length:m+1},()=>new Array(n+1).fill(0));
+  for(let i=0;i<=m;i++) dp[i][0]=i;
+  for(let j=0;j<=n;j++) dp[0][j]=j;
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      if(a[i-1]===b[j-1]) dp[i][j]=dp[i-1][j-1];
+      else dp[i][j]=1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+    }
+  }
+  return dp[m][n];
+}
+
+function wordsFuzzyMatch(w1,w2){
+  if(w1===w2) return true;
+  const ref = w2.length>=w1.length ? w2 : w1;
+  const threshold = ref.length<=3 ? 1 : Math.max(1,Math.floor(ref.length*0.28));
+  return levenshtein(w1,w2)<=threshold;
+}
+
+function containsPhrase(answerNorm, phraseNorm){
+  const a = answerNorm.split(' ').filter(Boolean);
+  const p = phraseNorm.split(' ').filter(Boolean);
+  if(p.length===0) return false;
+  for(let i=0;i<=a.length-p.length;i++){
+    let ok=true;
+    for(let j=0;j<p.length;j++){
+      if(!wordsFuzzyMatch(a[i+j],p[j])){ok=false;break;}
+    }
+    if(ok) return true;
+  }
+  if(p.length===1){
+    return a.some(w => w.includes(p[0]) || (p[0].length>=3 && wordsFuzzyMatch(w,p[0])));
+  }
+  return false;
+}
+
+/* ============ بيانات الأسئلة – الصفحة الثانية ============ */
+const questions = [
+{part:'أولًا: أكمل قوله تعالى', id:1, type:'phrase',
+  prompt:'﴿إِنَّ الَّذِينَ ...﴾ .... إلى .... ﴿...لَا يُؤْمِنُونَ﴾',
+  accept:['كفروا','سواء عليهم'],
+  full:'إِنَّ الَّذِينَ كَفَرُوا سَوَاءٌ عَلَيْهِمْ أَأَنذَرْتَهُمْ أَمْ لَمْ تُنذِرْهُمْ لَا يُؤْمِنُونَ'},
+
+{id:2, type:'phrase',
+  prompt:'﴿خَتَمَ اللَّهُ ...﴾ .... إلى .... ﴿...عَذَابٌ عَظِيمٌ﴾',
+  accept:['على قلوبهم','قلوبهم'],
+  full:'خَتَمَ اللَّهُ عَلَى قُلُوبِهِمْ وَعَلَى سَمْعِهِمْ وَعَلَى أَبْصَارِهِمْ غِشَاوَةٌ وَلَهُمْ عَذَابٌ عَظِيمٌ'},
+
+{id:3, type:'phrase',
+  prompt:'﴿وَمِنَ النَّاسِ مَنْ يَقُولُ آمَنَّا ...﴾ .... إلى .... ﴿... بِمُؤْمِنِينَ﴾',
+  accept:['بالله وباليوم الاخر','بالله','باليوم الاخر'],
+  full:'وَمِنَ النَّاسِ مَنْ يَقُولُ آمَنَّا بِاللَّهِ وَبِالْيَوْمِ الْآخِرِ وَمَا هُمْ بِمُؤْمِنِينَ'},
+
+{id:4, type:'phrase',
+  prompt:'﴿وَإِذَا قِيلَ لَهُمْ لَا تُفْسِدُوا ...﴾ .... إلى .... ﴿... لَا يَشْعُرُونَ﴾',
+  accept:['في الارض','قالوا انما نحن مصلحون','انما نحن مصلحون'],
+  full:'وَإِذَا قِيلَ لَهُمْ لَا تُفْسِدُوا فِي الْأَرْضِ قَالُوا إِنَّمَا نَحْنُ مُصْلِحُونَ ۝ أَلَا إِنَّهُمْ هُمُ الْمُفْسِدُونَ وَلَكِنْ لَا يَشْعُرُونَ'},
+
+{id:5, type:'phrase',
+  prompt:'﴿وَإِذَا قِيلَ لَهُمْ آمِنُوا كَمَا آمَنَ النَّاسُ...﴾ .... إلى .... ﴿...وَلَكِنْ لَا يَعْلَمُونَ﴾',
+  accept:['كما آمن السفهاء','السفهاء'],
+  full:'وَإِذَا قِيلَ لَهُمْ آمِنُوا كَمَا آمَنَ النَّاسُ قَالُوا أَنُؤْمِنُ كَمَا آمَنَ السُّفَهَاءُ أَلَا إِنَّهُمْ هُمُ السُّفَهَاءُ وَلَكِنْ لَا يَعْلَمُونَ'},
+
+{part:'ثانيًا: ما الكلمة التي جاءت...', id:6, type:'phrase',
+  prompt:'ما الكلمة التي جاءت بعد: ﴿سَوَاءٌ عَلَيْهِمْ﴾؟',
+  accept:['أأنذرتهم','ءأنذرتهم','انذرتهم'], full:'أَأَنذَرْتَهُمْ'},
+
+{id:7, type:'phrase',
+  prompt:'ما الكلمة التي جاءت قبل: ﴿عَذَابٌ أَلِيمٌ﴾؟',
+  accept:['ولهم','لهم'], full:'وَلَهُمْ'},
+
+{part:'ثالثًا: صحح الكلمة الخاطئة', id:8, type:'phrase',
+  prompt:'﴿خَتَمَ اللَّهُ عَلَى قُلُوبِهِمْ وَعَلَى أَبْصَارِهِمْ غِشَاوَةٌ﴾',
+  accept:['سمعهم'],
+  full:'الصواب: الآية تذكر أيضًا ﴿وَعَلَى سَمْعِهِمْ﴾ — والنص الكامل: خَتَمَ اللَّهُ عَلَى قُلُوبِهِمْ وَعَلَى سَمْعِهِمْ وَعَلَى أَبْصَارِهِمْ غِشَاوَةٌ'},
+
+{id:9, type:'phrase',
+  prompt:'﴿يُخَادِعُونَ اللَّهَ وَالَّذِينَ آمَنُوا وَمَا يَخْدَعُونَ إِلَّا أَنْفُسَهُمْ﴾',
+  accept:['يشعرون'],
+  full:'الصواب: تكملتها ﴿وَمَا يَشْعُرُونَ﴾ — والنص الكامل: يُخَادِعُونَ اللَّهَ وَالَّذِينَ آمَنُوا وَمَا يَخْدَعُونَ إِلَّا أَنْفُسَهُمْ وَمَا يَشْعُرُونَ'},
+
+{id:10, type:'phrase',
+  prompt:'﴿فِي قُلُوبِهِمْ أَلَمٌ فَزَادَهُمُ اللَّهُ مَرَضًا﴾',
+  accept:['مرض'],
+  full:'الصواب: مَرَضٌ (بدل أَلَمٌ) — ﴿فِي قُلُوبِهِمْ مَرَضٌ فَزَادَهُمُ اللَّهُ مَرَضًا﴾'},
+
+{id:11, type:'phrase',
+  prompt:'﴿أَلَا إِنَّهُمْ هُمُ الْمُصْلِحُونَ وَلَكِنْ لَا يَشْعُرُونَ﴾',
+  accept:['المفسدون','مفسدون'],
+  full:'الصواب: الْمُفْسِدُونَ (بدل الْمُصْلِحُونَ) — ﴿أَلَا إِنَّهُمْ هُمُ الْمُفْسِدُونَ وَلَكِنْ لَا يَشْعُرُونَ﴾'},
+
+{part:'رابعًا: اكتب', id:12, type:'phrase',
+  prompt:'اكتب آية فيها ذكر مرض القلوب',
+  accept:['قلوبهم مرض','مرض'],
+  full:'﴿فِي قُلُوبِهِمْ مَرَضٌ فَزَادَهُمُ اللَّهُ مَرَضًا﴾'},
+
+{id:13, type:'phrase',
+  prompt:'اكتب آية فيها ذكر قول المنافقين عندما يلقون المؤمنين',
+  accept:['اذا لقوا الذين امنوا قالوا امنا','قالوا امنا'],
+  full:'﴿وَإِذَا لَقُوا الَّذِينَ آمَنُوا قَالُوا آمَنَّا﴾'},
+
+{part:'خامسًا: رتب الكلمات', id:14, type:'phrase',
+  prompt:'(المفسدون – هم – ألا – إنهم)',
+  accept:['الا انهم هم المفسدون'], full:'أَلَا إِنَّهُمْ هُمُ الْمُفْسِدُونَ'},
+
+{id:15, type:'phrase',
+  prompt:'(الضلالة – بالهدى – اشتروا – أولئك – الذين)',
+  accept:['اولئك الذين اشتروا الضلالة بالهدى'], full:'أُولَئِكَ الَّذِينَ اشْتَرَوُا الضَّلَالَةَ بِالْهُدَى'},
+
+{part:'سادسًا: اكتب الكلمة الناقصة', id:16, type:'phrase',
+  prompt:'﴿إِنَّ الَّذِينَ كَفَرُوا سَوَاءٌ عَلَيْهِمْ ________ أَنْذَرْتَهُمْ أَمْ لَمْ تُنْذِرْهُمْ﴾',
+  accept:['أأنذرتهم','ءأنذرتهم','انذرتهم'], full:'أَأَنذَرْتَهُمْ'},
+
+{id:17, type:'phrase',
+  prompt:'﴿فِي قُلُوبِهِمْ ________ فَزَادَهُمُ اللَّهُ مَرَضًا﴾',
+  accept:['مرض'], full:'مَرَضٌ'},
+
+{id:18, type:'phrase',
+  prompt:'﴿وَإِذَا قِيلَ لَهُمْ ________ كَمَا آمَنَ النَّاسُ﴾',
+  accept:['آمنوا','امنوا'], full:'آمِنُوا'},
+
+{id:19, type:'phrase',
+  prompt:'﴿فَمَا رَبِحَتْ ________ وَمَا كَانُوا مُهْتَدِينَ﴾',
+  accept:['تجارتهم'], full:'تِجَارَتُهُمْ'},
+
+{part:'سابعًا: فهم الآيات', id:20, type:'attributes', required:3,
+  prompt:'ما الصفات التي ذكرتها الآيات عن المنافقين؟ اذكر ثلاث صفات باختصار.',
+  groups:[
+    ['خداع','يخادعون'],
+    ['فساد','مفسدون','يفسدون'],
+    ['مرض القلوب','مرض'],
+    ['سفهاء','سفه'],
+    ['يكذبون','كذب'],
+    ['لا يشعرون','يشعرون']
+  ],
+  labels:['خداع الله والمؤمنين','الإفساد في الأرض مع ادّعاء الإصلاح','مرض القلوب (ويزداد)','السفه (رغم ادّعائهم العقل)','الكذب','عدم الشعور بحقيقة حالهم'],
+  full:'من صفاتهم: الخداع، الإفساد في الأرض مع ادّعاء الإصلاح، مرض القلوب، السفه، الكذب، وعدم الشعور بحالهم (يُكتفى بثلاث منها).'}
+];
+
+/* ============ بناء الأسئلة في الصفحة ============ */
+const quizEl = document.getElementById('quiz');
+questions.forEach(q=>{
+  if(q.part){
+    const h = document.createElement('div');
+    h.className='part-title';
+    h.textContent = q.part;
+    quizEl.appendChild(h);
+  }
+  const wrap = document.createElement('div');
+  wrap.className='q';
+  wrap.id = 'q'+q.id;
+  const isLong = q.type==='attributes';
+  wrap.innerHTML = `
+    <div class="q-prompt"><span class="q-num">${q.id}.</span>${q.prompt}</div>
+    ${isLong
+      ? `<textarea rows="3" data-qid="${q.id}" placeholder="اكتب إجابتك هنا..."></textarea>`
+      : `<input type="text" data-qid="${q.id}" placeholder="اكتب إجابتك هنا...">`}
+    <div class="feedback" id="fb${q.id}"></div>
+  `;
+  quizEl.appendChild(wrap);
+});
+
+/* ============ التصحيح ============ */
+document.getElementById('gradeBtn').addEventListener('click', ()=>{
+  let score = 0;
+  questions.forEach(q=>{
+    const el = document.querySelector(`[data-qid="${q.id}"]`);
+    const raw = el.value || '';
+    const norm = normalize(raw);
+    const qWrap = document.getElementById('q'+q.id);
+    const fb = document.getElementById('fb'+q.id);
+    let correct = false;
+    let extra = '';
+
+    if(q.type==='phrase'){
+      correct = q.accept.some(acc => containsPhrase(norm, normalize(acc)));
+    } else if(q.type==='attributes'){
+      const required = q.required || 3;
+      let matched = [];
+      q.groups.forEach((alts,idx)=>{
+        const found = alts.some(alt => norm.includes(normalize(alt)) || containsPhrase(norm, normalize(alt)));
+        if(found) matched.push(q.labels[idx]);
+      });
+      correct = matched.length>=required;
+      extra = matched.length>0
+        ? `الصفات التي ذكرتها ووُجدت: ${matched.join('، ')} (المطلوب ${required} على الأقل).`
+        : 'لم يتم التعرف على أي صفة واضحة في إجابتك.';
+    }
+
+    qWrap.classList.remove('correct','incorrect');
+    fb.classList.add('show');
+
+    if(raw.trim()===''){
+      qWrap.classList.add('incorrect');
+      fb.innerHTML = `<span class="tag">لم تتم الإجابة —</span> الإجابة الصحيحة: <span class="correct-ans">${q.full}</span>`;
+    } else if(correct){
+      score++;
+      qWrap.classList.add('correct');
+      fb.innerHTML = `<span class="tag">إجابة صحيحة ✓</span>${extra ? '<br>'+extra : ''}`;
+    } else {
+      qWrap.classList.add('incorrect');
+      fb.innerHTML = `<span class="tag">غير دقيقة —</span> الإجابة الصحيحة: <span class="correct-ans">${q.full}</span>${extra ? '<br>'+extra : ''}`;
+    }
+  });
+
+  const resultEl = document.getElementById('result');
+  resultEl.classList.remove('show');
+  void resultEl.offsetWidth;
+  resultEl.classList.add('show');
+  document.getElementById('scoreText').textContent = `${score} / 20`;
+  const pct = Math.round((score/20)*100);
+  document.getElementById('pctText').textContent = `النسبة: ${pct}%`;
+  resultEl.scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  document.querySelectorAll('.q input, .q textarea').forEach(el=>el.value='');
+  document.querySelectorAll('.q').forEach(el=>el.classList.remove('correct','incorrect'));
+  document.querySelectorAll('.feedback').forEach(el=>{el.classList.remove('show'); el.innerHTML='';});
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('studentName').value='';
+});
+
+document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+</script>
+</body>
+</html>
